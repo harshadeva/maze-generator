@@ -144,6 +144,7 @@ class Maze {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = 'black';
+        ctx.lineCap = 'round';
 
         let cellSize = canvas.width / this.dimension;
 
@@ -298,17 +299,17 @@ class Maze {
     generateSVG() {
         let cellSize = 10;
         let svgWidth = this.dimension * cellSize;
-        let svgHeight = this.dimension * cellSize;
+            let svgHeight = this.dimension * cellSize;
 
-        let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
-        svg += `<rect width="100%" height="100%" fill="white"/>`;
-        svg += `<g stroke="black" stroke-width="2">`;
+            let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
+            svg += `<rect width="100%" height="100%" fill="white"/>`;
+            svg += `<g stroke="black" stroke-width="2" stroke-linecap="round">`;
 
-        for (let row = 0; row < this.dimension; row++) {
-            for (let col = 0; col < this.dimension; col++) {
-                let cell = this.grid[row][col];
-                let x = col * cellSize;
-                let y = row * cellSize;
+            for (let row = 0; row < this.dimension; row++) {
+                for (let col = 0; col < this.dimension; col++) {
+                    let cell = this.grid[row][col];
+                    let x = col * cellSize;
+                    let y = row * cellSize;
 
                 if (cell.walls.top) {
                     svg += `<line x1="${x}" y1="${y}" x2="${x + cellSize}" y2="${y}" />`;
