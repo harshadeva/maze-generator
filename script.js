@@ -295,7 +295,40 @@ class Maze {
         }
     }
 
-    
+    generateSVG() {
+        let cellSize = 10;
+        let svgWidth = this.dimension * cellSize;
+        let svgHeight = this.dimension * cellSize;
+
+        let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
+        svg += `<rect width="100%" height="100%" fill="white"/>`;
+        svg += `<g stroke="black" stroke-width="2">`;
+
+        for (let row = 0; row < this.dimension; row++) {
+            for (let col = 0; col < this.dimension; col++) {
+                let cell = this.grid[row][col];
+                let x = col * cellSize;
+                let y = row * cellSize;
+
+                if (cell.walls.top) {
+                    svg += `<line x1="${x}" y1="${y}" x2="${x + cellSize}" y2="${y}" />`;
+                }
+                if (cell.walls.right) {
+                    svg += `<line x1="${x + cellSize}" y1="${y}" x2="${x + cellSize}" y2="${y + cellSize}" />`;
+                }
+                if (cell.walls.bottom) {
+                    svg += `<line x1="${x + cellSize}" y1="${y + cellSize}" x2="${x}" y2="${y + cellSize}" />`;
+                }
+                if (cell.walls.left) {
+                    svg += `<line x1="${x}" y1="${y + cellSize}" x2="${x}" y2="${y}" />`;
+                }
+            }
+        }
+
+        svg += `</g>`;
+        svg += `</svg>`;
+        return svg;
+    }
 }
 
 generateButton.addEventListener('click', () => {
@@ -311,10 +344,18 @@ maze = new Maze(dimension);
 maze.solutionVisible = false;
 maze.draw();
 
+// downloadButton.addEventListener('click', () => {
+//     const image = canvas.toDataURL("image/png", 1.0);
+//     const link = document.createElement('a');
+//     link.href = image.replace("image/png", "image/octet-stream");
+//     link.download = 'maze.png';
+//     link.click();
+// });
+
 downloadButton.addEventListener('click', () => {
-    const image = canvas.toDataURL("image/png", 1.0);
+    let svg = maze.generateSVG();
     const link = document.createElement('a');
-    link.href = image.replace("image/png", "image/octet-stream");
-    link.download = 'maze.png';
+    link.href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    link.download = 'maze.svg';
     link.click();
 });
