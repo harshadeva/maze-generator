@@ -139,6 +139,50 @@ class Maze {
         }
     }
 
+    calculateBendRatio() {
+        let solution = this.findSolution();
+        if (!solution) {
+            return 0; // No solution, no bends
+        }
+
+        let bends = 0;
+        let prevDirection = null;
+
+        for (let i = 1; i < solution.length; i++) {
+            let dx = solution[i][1] - solution[i - 1][1];
+            let dy = solution[i][0] - solution[i - 1][0];
+            let direction;
+
+            if (dx !== 0) {
+                direction = 'horizontal';
+            } else {
+                direction = 'vertical';
+            }
+
+            if (prevDirection && direction !== prevDirection) {
+                bends++;
+            }
+
+            prevDirection = direction;
+        }
+
+        return bends / (this.dimension * this.dimension);
+    }
+
+    generateWithBendRatio() {
+        this.init();
+        this.generate();
+        let bendRatio = this.calculateBendRatio();
+
+        while (bendRatio < 0.09) {
+            this.init();
+            this.generate();
+            bendRatio = this.calculateBendRatio();
+        }
+
+        this.draw();
+    }
+
     draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'white';
@@ -354,6 +398,7 @@ class Maze {
 generateButton.addEventListener('click', () => {
     dimension = parseInt(dimensionInput.value);
     maze = new Maze(dimension);
+    maze.generateWithBendRatio();
 });
 
 solveButton.addEventListener('click', () => {
@@ -362,7 +407,6 @@ solveButton.addEventListener('click', () => {
 
 maze = new Maze(dimension);
 maze.solutionVisible = false;
-maze.draw();
 
 // downloadButton.addEventListener('click', () => {
 //     const image = canvas.toDataURL("image/png", 1.0);
