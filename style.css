@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#mazeCanvas {
+    border: 1px solid black;
+    background-color: white;
+    width: 500px;
+    height: 500px;
+}
