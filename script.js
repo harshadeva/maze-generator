@@ -294,6 +294,8 @@ class Maze {
             this.draw();
         }
     }
+
+    
 }
 
 generateButton.addEventListener('click', () => {
