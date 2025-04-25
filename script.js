@@ -271,15 +271,34 @@ class Maze {
         ctx.lineWidth = 2;
 
         let cellSize = canvas.width / this.dimension;
+        let bends = 0;
 
         ctx.beginPath();
         ctx.moveTo((solution[0][1] * cellSize) + cellSize / 2, (solution[0][0] * cellSize) + cellSize / 2);
 
+        let prevDirection = null;
         for (let i = 1; i < solution.length; i++) {
+            let dx = solution[i][1] - solution[i - 1][1];
+            let dy = solution[i][0] - solution[i - 1][0];
+            let direction;
+
+            if (dx !== 0) {
+                direction = 'horizontal';
+            } else {
+                direction = 'vertical';
+            }
+
+            if (prevDirection && direction !== prevDirection) {
+                bends++;
+            }
+
+            prevDirection = direction;
             ctx.lineTo((solution[i][1] * cellSize) + cellSize / 2, (solution[i][0] * cellSize) + cellSize / 2);
         }
 
         ctx.stroke();
+
+        document.getElementById('bends').textContent = bends;
     }
 
     toggleSolution() {
