@@ -146,59 +146,61 @@ class Maze {
 
         let cellSize = canvas.width / this.dimension;
 
-        for (let row = 0; row < this.dimension; row++) {
-            for (let col = 0; col < this.dimension; col++) {
-                let cell = this.grid[row][col];
-                let x = col * cellSize;
-                let y = row * cellSize;
+        if (!this.solutionVisible) {
+            for (let row = 0; row < this.dimension; row++) {
+                for (let col = 0; col < this.dimension; col++) {
+                    let cell = this.grid[row][col];
+                    let x = col * cellSize;
+                    let y = row * cellSize;
 
-                if (cell.walls.top) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.lineTo(x + cellSize, y);
-                    ctx.stroke();
-                }
-                if (cell.walls.right) {
-                    ctx.beginPath();
-                    ctx.moveTo(x + cellSize, y);
-                    ctx.lineTo(x + cellSize, y + cellSize);
-                    ctx.stroke();
-                }
-                if (cell.walls.bottom) {
-                    ctx.beginPath();
-                    ctx.moveTo(x + cellSize, y + cellSize);
-                    ctx.lineTo(x, y + cellSize);
-                    ctx.stroke();
-                }
-                if (cell.walls.left) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, y + cellSize);
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
+                    if (cell.walls.top) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + cellSize, y);
+                        ctx.stroke();
+                    }
+                    if (cell.walls.right) {
+                        ctx.beginPath();
+                        ctx.moveTo(x + cellSize, y);
+                        ctx.lineTo(x + cellSize, y + cellSize);
+                        ctx.stroke();
+                    }
+                    if (cell.walls.bottom) {
+                        ctx.beginPath();
+                        ctx.moveTo(x + cellSize, y + cellSize);
+                        ctx.lineTo(x, y + cellSize);
+                        ctx.stroke();
+                    }
+                    if (cell.walls.left) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, y + cellSize);
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                    }
                 }
             }
+
+            // Draw outer walls
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(canvas.width, 0);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(canvas.width, 0);
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(canvas.width, canvas.height);
+            ctx.lineTo(0, canvas.height);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            ctx.lineTo(0, 0);
+            ctx.stroke();
         }
-
-        // Draw outer walls
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(canvas.width, 0);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(canvas.width, 0);
-        ctx.lineTo(canvas.width, canvas.height);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(canvas.width, canvas.height);
-        ctx.lineTo(0, canvas.height);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(0, canvas.height);
-        ctx.lineTo(0, 0);
-        ctx.stroke();
     }
 
     solve() {
@@ -264,7 +266,7 @@ class Maze {
 
     drawSolution(solution) {
         ctx.strokeStyle = 'red';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
 
         let cellSize = canvas.width / this.dimension;
 
@@ -304,3 +306,4 @@ solveButton.addEventListener('click', () => {
 
 maze = new Maze(dimension);
 maze.solutionVisible = false;
+maze.draw();
