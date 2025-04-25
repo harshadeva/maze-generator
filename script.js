@@ -3,8 +3,9 @@ const ctx = canvas.getContext('2d');
 const dimensionInput = document.getElementById('dimension');
 const generateButton = document.getElementById('generate');
 const solveButton = document.getElementById('solve');
+const downloadButton = document.getElementById('download');
 
-let dimension = 50;
+let dimension = 20;
 let maze;
 
 class Cell {
@@ -307,3 +308,11 @@ solveButton.addEventListener('click', () => {
 maze = new Maze(dimension);
 maze.solutionVisible = false;
 maze.draw();
+
+downloadButton.addEventListener('click', () => {
+    const image = canvas.toDataURL("image/png", 1.0);
+    const link = document.createElement('a');
+    link.href = image.replace("image/png", "image/octet-stream");
+    link.download = 'maze.png';
+    link.click();
+});
